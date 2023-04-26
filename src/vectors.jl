@@ -114,12 +114,73 @@ end
 # ------------
 export hdv, binhdv, bphdv, sphdv, realhdv, gradhdv, gradbphdv
 
+"""
+    hdv(N::Int=10_000)
+
+Generate a hyperdimensional vector of the `BinaryHDV` type with
+a default dimensionality of `N=10_000`. This vector contains random
+binary elements encoded effiently as a `BitVector`s
+"""
 hdv(N::Int=10_000) = BinaryHDV(;N)
+
+"""
+    binhdv(N::Int=10_000)
+
+Generate a binary hyperdimensional vector of the `BinaryHDV` type with
+a default dimensionality of `N=10_000`. This vector contains random
+binary elements encoded effiently as a `BitVector`s.
+"""
 binhdv(N::Int=10_000) = BinaryHDV(;N)
+
+"""
+    binhdv(N::Int=10_000)
+
+Generate a binary hyperdimensional vector of the `BinaryHDV` type with
+a default dimensionality of `N=10_000`. This vector contains random
+bipolar (-1, 1) elements encoded effiently as a `BitVector`s.
+"""
 bphdv(N::Int=10_000) = BipolarHDV(;N)
+
+"""
+    sphdv(N::Int=10_000, T::Type=Bool; p=0.1)
+
+Generate a sparse hyperdimensional vector of the `SparseHDV` type with
+a default dimensionality of `N=10_000` and a sparsity level of `p=0.1`. 
+The elements of this vector are randomly set to `true` or `false` with a 
+probability of `p`, and are contained in a `SparseVector` with specified
+element type `T`.
+"""
 sphdv(N::Int=10_000, T::Type=Bool; p=0.1) = SparseHDV(sprand(T, N, p), p)
+
+"""
+    realhdv(N::Int=10_000, T::Type=Float64)
+
+Generate a hyperdimensional vector of the `RealHDV` type with a 
+default dimensionality of `N=10_000`. This vector contains  
+standard normal values of type  
+`T` values (default `Float64`).
+"""
 realhdv(N::Int=10_000, T::Type=Float64) = RealHDV(T; N)
+
+"""
+    gradhdv(N::Int=10_000; l=0, u=1)
+
+Generate a graded hyperdimensional vector of the `GradedHDV` type with 
+a default dimensionality of `N=10_000` and a range between `l` and `u`. 
+This vector contains random graded elements, i.e., elements with 
+values between `l` and `u` that are uniformly distributed.
+"""
 gradhdv(N::Int=10_000; l=0, u=1) = GradedHDV((l, u); N)
+
+"""
+    gradbphdv(N::Int=10_000; l=-1, u=1)
+
+Generate a graded bipolar hyperdimensional vector of the `GradedBipolarHDV` 
+type with a default dimensionality of `N=10_000` and a range between `l` 
+and `u`. This vector contains random graded bipolar elements, i.e., 
+elements with values between `l` and `u` that are uniformly distributed, 
+and is encoded efficiently as an array of `Float64` values.
+"""
 gradbphdv(N::Int=10_000; l=-1, u=1) = GradedBipolarHDV((l, u); N)
 
 
