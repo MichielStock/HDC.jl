@@ -1,5 +1,7 @@
 module HDC
 
-# Write your package code here.
+using LinearAlgebra, Random, SparseArrays
+
+include("vectors.jl")
 
 end
