@@ -1,6 +1,6 @@
 #=
 Created on 24/04/2023 15:44:03
-Last update: -
+Last update: 2023-05-05
 
 @author: Michiel Stock
 michielfmstock@gmail.com
@@ -104,11 +104,13 @@ function GradedBipolarHDV((l, u)=(-1, 1); N::Int=10_000)
     @assert -1 ≤ l < 0 < u ≤ 1 "Upper and lower bounds for `GradedBipolarHDV` have to be `-1 ≤ l < 0 < u ≤ 1`"
     v = rand(N)
     if (l, u) != (-1, 1)
-        v .*= u - l
-        v .+= l
+        v .*= (u - l) / 2
+        v .+= (l + 1) / 2
     end
-    return GradedHDV(v)
+    return GradedBipolarHDV(v)
 end
+
+Base.getindex(hdv::GradedBipolarHDV, i::Int) = 2getindex(hdv.v, i) - 1
 
 # CONSTRUCTORS
 # ------------
@@ -184,3 +186,10 @@ and is encoded efficiently as an array of `Float64` values.
 gradbphdv(N::Int=10_000; l=-1, u=1) = GradedBipolarHDV((l, u); N)
 
 
+# TRAITS
+# ------
+
+abstract type ElementType end
+struct BinaryElements <: ElementType end
+struct NumericElements <: ElementType end
+struct GradedElements <: ElementType end

@@ -38,11 +38,13 @@
         v = gradhdv(N)
         @test eltype(v) == Float64
         @test all(e->0≤e≤1, v)
+        @test all(e->0.2≤0.6, GradedHDV((0.2, 0.6); N))
 
         # graded bipolar
         v = gradbphdv(N)
         @test eltype(v) == Float64
         @test all(e->-1≤e≤1, v)
+        @test all(e->-0.2≤0.6, GradedBipolarHDV((-0.2, 0.6); N))
     end
 
 end
