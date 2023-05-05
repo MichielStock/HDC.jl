@@ -82,7 +82,9 @@ end
 
 IntHDV(v::AbstractVector) = IntHDV(v, 1)
 
-struct GradedHDV{T<:Real} <: DenseHDV{T}
+abstract type AbstractGradedHDV{T} <: DenseHDV{T} end
+
+struct GradedHDV{T<:Real} <: AbstractGradedHDV{T}
     v::Vector{T}
 end
 
@@ -96,7 +98,7 @@ function GradedHDV((l, u)=(0, 1); N::Int=10_000)
     return GradedHDV(v)
 end
 
-struct GradedBipolarHDV{T<:Real} <: DenseHDV{T}
+struct GradedBipolarHDV{T<:Real} <: AbstractGradedHDV{T}
     v::Vector{T}
 end
 
@@ -189,7 +191,20 @@ gradbphdv(N::Int=10_000; l=-1, u=1) = GradedBipolarHDV((l, u); N)
 # TRAITS
 # ------
 
+# these traits encode the element types that determine the behaviour of the operations
 abstract type ElementType end
 struct BinaryElements <: ElementType end
 struct NumericElements <: ElementType end
 struct GradedElements <: ElementType end
+
+# numeric is the default
+ElementType(::Type{<:AbstractHDV}) = NumericElements()
+ElementType(::Type{<:BinaryHDV}) = BinaryElements()
+ElementType(::Type{<:DenseHDV{Bool}}) = BinaryElements()
+ElementType(::Type{<:AbstractGradedHDV}) = GradedElements()
+
+
+# PROMOTION
+# ---------
+
+# TODO: implement promotion
