@@ -32,6 +32,8 @@ Base.getindex(hdv::AbstractHDV, i::Int) = getindex(hdv.v, i)
 LinearAlgebra.norm(hdv::AbstractHDV) = norm(hdv.v)
 Base.sum(hdv::AbstractHDV) = sum(hdv.v)
 
+get_vector(hdv::AbstractHDV) = hdv.v
+
 # Bitvector HDV
 # -------------
 
@@ -69,11 +71,10 @@ abstract type DenseHDV{T} <: AbstractHDV{T} end
 
 struct RealHDV{T<:Real} <: DenseHDV{T}
     v::Vector{T}
-    n::Int
 end
 
-RealHDV(v::AbstractVector) = RealHDV(v, 1)
-RealHDV(T::Type=Float64; N::Int=10_000) = RealHDV(randn(T, N))
+RealHDV(v::AbstractVector) = RealHDV(v)
+RealHDV(T::Type=Float64; N::Int=10_000) = RealHDV(randn(T, N) ./ (T(sqrt(N))))
 
 struct IntHDV{T<:Integer} <: DenseHDV{T}
     v::Vector{T}
@@ -119,12 +120,15 @@ Base.getindex(hdv::GradedBipolarHDV, i::Int) = 2getindex(hdv.v, i) - 1
 export hdv, binhdv, bphdv, sphdv, realhdv, gradhdv, gradbphdv
 
 """
-    hdv(N::Int=10_000)
+    hdv([T], N::Int=10_000)
 
-Generate a hyperdimensional vector of the `BinaryHDV` type with
+Generate a hyperdimensional vector of the `T` (default is `BinaryHDV`) type with
 a default dimensionality of `N=10_000`. This vector contains random
 binary elements encoded effiently as a `BitVector`s
 """
+#TODO: complete a general version
+
+
 hdv(N::Int=10_000) = BinaryHDV(;N)
 
 """
